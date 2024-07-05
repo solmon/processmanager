@@ -1,9 +1,10 @@
+workspace = { members = ["crates/xmltojson"] }
 [package]
 name = "webdev"
 version = "0.0.1"
-homepage = "https://github.com/jeremychone/rust-webdev"
+homepage = "https://github.com/solmon/tenantdatamesh"
 description = "IoT Gateway with embedded web server"
-repository = "https://github.com/jeremychone/rust-webdev"
+repository = "https://github.com/solmon/tenantdatamesh"
 authors = ["Solmon <solmon@gmail.com>"]
 keywords = [
 	"web",
@@ -17,7 +18,7 @@ edition = "2021"
 
 [[bin]]
 name = "webserver"
-path = "main.rs"
+path = "src/main.rs"
 
 [dependencies]
 tokio = { version = "1", features = ["full"] }
