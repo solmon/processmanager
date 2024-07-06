@@ -3,8 +3,9 @@ use quick_xml::reader::Reader;
 use std::borrow::Cow;
 use quick_xml::name::QName;
 use std::fs;
-use std::mem;
 use std::result::Result;
+use ftp::FtpStream;
+use std::str;
 
 #[derive(Debug)]
 struct NewsFeed {
@@ -33,26 +34,22 @@ impl NewsItem {
         reader: &mut Reader<&[u8]>,
         element: BytesStart) -> Result<(), quick_xml::Error> {
 
-        let mut title = Cow::Borrowed("");
-        let mut link = Cow::Borrowed("");
-        let mut description = Cow::Borrowed("");
-
         loop {         
             let mut main_buf = Vec::new();               
             match reader.read_event_into(&mut main_buf)? {
                 Event::Start(element) => {
                     let name = element.name();
                     if name == QName(b"title") {
-                        title = reader.read_text(element.name())?;  
-                        self.title = title.into();
+                        //title = reader.read_text(element.name())?;  
+                        self.title = reader.read_text(element.name())?.into();
                     }
                     else if name == QName(b"link") {
-                        link = reader.read_text(element.name())?;
-                        self.link = link.into();
+                        //link = reader.read_text(element.name())?;
+                        self.link = reader.read_text(element.name())?.into();
                     }
                     else if name == QName(b"description") {
-                        description = reader.read_text(element.name())?;
-                        self.description = description.into();
+                        //description = reader.read_text(element.name())?;
+                        self.description = reader.read_text(element.name())?.into();
                     }                    
                     else {}
                 }
@@ -79,10 +76,7 @@ impl NewsFeed {
             description: String::from(""),
             items: Vec::new(),
         }
-    }
-    fn add_item(&mut self, item: NewsItem) {
-        self.items.push(item);
-    }   
+    }       
     fn news_element(&mut self, 
         reader: &mut Reader<&[u8]>,
         element: BytesStart) -> Result<(), quick_xml::Error> {
@@ -129,8 +123,22 @@ impl NewsFeed {
 fn main() -> Result<(), quick_xml::Error> {
     
     let mut buf = Vec::new();    
-    let input: String = fs::read_to_string("../../tests/documents/samplenews.xml")?;
-    let mut reader = Reader::from_str(&input);
+    
+    //let input: String = fs::read_to_string("../../tests/documents/samplenews.xml")?;
+    let mut ftp_stream = FtpStream::connect("127.0.0.1:21").unwrap();
+    let _ = ftp_stream.login("one", "1234rieter").unwrap();
+
+    println!("FTP connection established");
+    println!("Current directory: {}", ftp_stream.pwd().unwrap());
+    ftp_stream.cwd("/data").unwrap();
+    let remote_file = ftp_stream.simple_retr("samplenews.xml").unwrap();
+    //println!("Read file with contents\n{}\n", str::from_utf8(&remote_file.into_inner()).unwrap());
+    //println!("Current directory: {}", ftp_stream.pwd().unwrap());
+    let binding = remote_file.into_inner();
+    let input = str::from_utf8(&binding).unwrap();
+    let _ = ftp_stream.quit();
+    
+    let mut reader = Reader::from_str(input);
     reader.config_mut().trim_text(true);
     let mut newsfeed = NewsFeed::new(); 
 
@@ -150,6 +158,6 @@ fn main() -> Result<(), quick_xml::Error> {
 
     let struct_str = format!("{:#?}", newsfeed);
     println!("{}", struct_str);
-
+    
     Ok(())    
 }

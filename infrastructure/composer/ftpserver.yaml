@@ -1,0 +1,20 @@
+version: '3'
+services:
+  ftp-server:
+    container_name: my-ftp-server
+    environment:
+      - USERS=one|1234rieter
+    image: delfer/alpine-ftp-server
+    ports:
+      - 21:21/tcp
+    volumes:
+      - /home/solmon/rieter/ftpdata:/data
+  rabbitmq:
+    container_name: my-rabbitmq
+    image: bitnami/rabbitmq:latest
+    environment:
+      - RABBITMQ_USERNAME=admin
+      - RABBITMQ_PASSWORD=bitnami1
+      - RABBITMQ_NODE_PORT_NUMBER=5672
+    ports:
+      - 5672:5672
