@@ -39,10 +39,16 @@ edition = "2021"
 [workspace.dependencies]
 tokio = { version = "1", features = ["full"] }
 tokio-util = { version = "0.7.4", features = ["codec", "time"] }
+config = "0.14.0"
+serde = "1.0"
+serde_derive = "1.0"
 
 [dependencies]
+config = { workspace = true }
 tokio = { workspace = true }
 tokio-util = { workspace = true }
+serde = { workspace = true }
+serde_derive = { workspace = true }
 rtcore = { path = "crates/rtcore" }
 rtftp = { path = "crates/rtftp" }
 rbmq = { path = "crates/rbmq" }

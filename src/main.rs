@@ -23,7 +23,7 @@ mod cmd;
 mod wbserver;
 mod xts;
 
-const DEFAULT_PORT: u16 = 8080;
+const DEFAULT_PORT: u16 = 8088;
 const DEFAULT_WEB_FOLDER: &str = "./";
 const DEBOUNCE_DURATION_MS: u64 = 50;
 

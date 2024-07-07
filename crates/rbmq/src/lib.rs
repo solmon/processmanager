@@ -17,3 +17,10 @@ pub fn send_msg(payload: &str) -> Result<(),Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+
+#[derive(Debug, Default, serde_derive::Deserialize, PartialEq, Eq)]
+pub struct RbmqConfig {
+    msconn: String,
+    msqueue: String,
+}
