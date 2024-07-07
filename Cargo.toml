@@ -25,7 +25,7 @@ members = [
 
 [[bin]]
 name = "webserver"
-path = "src/main.rs"
+path = "src/simweb/server.rs"
 
 [[bin]]
 name = "rtdomain"
@@ -59,9 +59,15 @@ clap =  {version = "4", features = ["cargo"]}
 futures = "0.3"
 notify = "6"
 notify-debouncer-mini = "0.4"
+simple-server = "0.4.0"
+http = "1.1.0"
+httparse = "1.2.3"
+log = "0.4.22"
+env_logger = "0.11.3"
 
+[dev-dependencies]
+env_logger = "0.11.3"
 
 [[example]]
-name = "xml_check"
-required-features = ["serialize"]
-path = "crates/xmltojson/src/main.rs"
+name = "newweb"
+path = "src/simweb/server.rs"

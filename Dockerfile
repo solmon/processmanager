@@ -14,4 +14,7 @@ RUN chmod 644 /usr/local/share/ca-certificates/crates.io.crt \
 
 RUN cargo install --path .
 
-CMD ["webserver"]
+EXPOSE 7878
+
+CMD ["sh /usr/src/myapp/infrastructure/scripts/installshiftdomain.sh"]
+
