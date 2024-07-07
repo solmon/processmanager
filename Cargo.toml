@@ -16,13 +16,17 @@ license = "MIT OR Apache-2.0"
 edition = "2021"
 
 [workspace]
-members = [
+members = [ "crates/ddshift", "crates/rbmq", "crates/rtcore", "crates/rtftp",
 	"crates/xmltojson",
 ]
 
 [[bin]]
 name = "webserver"
 path = "src/main.rs"
+
+[[bin]]
+name = "rtdomain"
+path = "src/rtdomain/bin/main.rs"
 
 [workspace.package]
 version = "0.0.0"
@@ -37,6 +41,10 @@ tokio-util = { version = "0.7.4", features = ["codec", "time"] }
 xmltojson = { path = "crates/xmltojson" }
 tokio = { workspace = true }
 tokio-util = { workspace = true }
+rtcore = { path = "crates/rtcore" }
+rtftp = { path = "crates/rtftp" }
+rbmq = { path = "crates/rbmq" }
+ddshift = { path = "crates/ddshift" }
 warp = "0.3"
 pathdiff = "0.2"
 clap =  {version = "4", features = ["cargo"]}

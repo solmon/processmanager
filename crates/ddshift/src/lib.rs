@@ -2,13 +2,12 @@ use quick_xml::events::{BytesStart, Event};
 use quick_xml::reader::Reader;
 use std::borrow::Cow;
 use quick_xml::name::QName;
-use std::fs;
+//use std::fs;
 use std::result::Result;
-use ftp::FtpStream;
 use std::str;
 
 #[derive(Debug)]
-struct NewsFeed {
+pub struct NewsFeed {
     title: String,
     link: String,
     description: String,
@@ -16,7 +15,7 @@ struct NewsFeed {
 }
 
 #[derive(Debug, Clone)]
-struct NewsItem {
+pub struct NewsItem {
     title: String,
     link: String,
     description: String,
@@ -119,26 +118,11 @@ impl NewsFeed {
     }
 }
 
-
-fn main() -> Result<(), quick_xml::Error> {
+pub fn transform(input: &str) -> Result<NewsFeed, Box<dyn std::error::Error>> {
     
-    let mut buf = Vec::new();    
-    
-    //let input: String = fs::read_to_string("../../tests/documents/samplenews.xml")?;
-    let mut ftp_stream = FtpStream::connect("127.0.0.1:21").unwrap();
-    let _ = ftp_stream.login("one", "1234rieter").unwrap();
-
-    println!("FTP connection established");
-    println!("Current directory: {}", ftp_stream.pwd().unwrap());
-    ftp_stream.cwd("/data").unwrap();
-    let remote_file = ftp_stream.simple_retr("samplenews.xml").unwrap();
-    //println!("Read file with contents\n{}\n", str::from_utf8(&remote_file.into_inner()).unwrap());
-    //println!("Current directory: {}", ftp_stream.pwd().unwrap());
-    let binding = remote_file.into_inner();
-    let input = str::from_utf8(&binding).unwrap();
-    let _ = ftp_stream.quit();
-    
+    let mut buf = Vec::new();        
     let mut reader = Reader::from_str(input);
+
     reader.config_mut().trim_text(true);
     let mut newsfeed = NewsFeed::new(); 
 
@@ -147,7 +131,7 @@ fn main() -> Result<(), quick_xml::Error> {
             Event::Start(element) => {                
                 if let b"channel" = element.name().as_ref() {
                     println!("Channel found");                    
-                    newsfeed.news_element(&mut reader, element);                                        
+                    let _ = newsfeed.news_element(&mut reader, element);                                        
                 }
             }
             Event::Eof => break,
@@ -155,9 +139,5 @@ fn main() -> Result<(), quick_xml::Error> {
         }
         buf.clear();
     }
-
-    let struct_str = format!("{:#?}", newsfeed);
-    println!("{}", struct_str);
-    
-    Ok(())    
+    Ok((newsfeed))    
 }
