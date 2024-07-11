@@ -1,9 +1,12 @@
 use ftp::FtpStream;
 use std::str;
+use std::env;
 
 pub fn getmessage(machine_name: &str) -> Result<String, Box<dyn std::error::Error>> {
     
-    let mut ftp_stream = FtpStream::connect("127.0.0.1:21").unwrap();
+    let ftp_conn = env::var("FTP_CONN").unwrap_or_else(|_| "localhost:21".into());
+    //localhost:21
+    let mut ftp_stream = FtpStream::connect(ftp_conn).unwrap();
     let _ = ftp_stream.login("one", "1234rieter").unwrap();
 
     println!("FTP connection established");

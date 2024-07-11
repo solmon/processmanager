@@ -20,3 +20,10 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+  iotgateway:
+    container_name: my-iot-gateway
+    image: rt-iot-gateway:latest
+    ports:
+      - 7878:7878
+    environment:
+      - FTP_CONN=host.docker.internal:21

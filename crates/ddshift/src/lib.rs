@@ -45,6 +45,7 @@ impl NewsItem {
                     else if name == QName(b"link") {
                         //link = reader.read_text(element.name())?;
                         self.link = reader.read_text(element.name())?.into();
+                        
                     }
                     else if name == QName(b"description") {
                         //description = reader.read_text(element.name())?;
