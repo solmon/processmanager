@@ -1,9 +1,9 @@
 [package]
 name = "webdev"
 version = "0.0.1"
-homepage = "https://github.com/solmon/tenantdatamesh"
-description = "IoT Gateway with embedded web server"
-repository = "https://github.com/solmon/tenantdatamesh"
+homepage = "https://github.com/solmon/processmanager"
+description = "A process manager with embedded web server"
+repository = "https://github.com/solmon/processmanager"
 authors = ["Solmon <solmon@gmail.com>"]
 keywords = [
 	"web",
